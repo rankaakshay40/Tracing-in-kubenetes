@@ -1,0 +1,15 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: single-app-single-collector
+  labels:
+    app: single-app-single-collector
+spec:
+  selector:
+    app: single-app-single-collector  # Match the label of your pod
+  ports:
+    - protocol: TCP
+      port: 8000          # Port on the service
+      targetPort: 8000     # Port inside the container
+ 
+  type: ClusterIP

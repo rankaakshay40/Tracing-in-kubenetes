@@ -1,0 +1,44 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: single-app-single-collector
+  labels:
+    app: single-app-single-collector
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: single-app-single-collector
+  template:
+    metadata:
+      labels:
+        app: single-app-single-collector
+    spec:
+      containers:
+      - name: single-app-single-collector
+        image: rutush10/otel-autoinstrumentation-fastapi-simple-app:0.0.4
+        imagePullPolicy: Always
+        ports:
+        - containerPort: 8000
+
+        env:
+        - name: OTEL_EXPORTER_OTLP_ENDPOINT
+          value: "http://otel-collector:4317"
+        - name: OTEL_LOGS_EXPORTER
+          value: "console,otlp"
+        - name: OTEL_TRACES_EXPORTER
+          value: "console,otlp"
+        - name: OTEL_METRICS_EXPORTER
+          value: "console,otlp"
+        - name: OTEL_SERVICE_NAME
+          value: "single-app-single-collector-fastapi-app"
+        - name: OTEL_PYTHON_LOGGING_AUTO_INSTRUMENTATION_ENABLED
+          value: "true"
+
+        resources:
+          limits:
+            memory: "1Gi"
+            cpu: "0.5"
+          requests:
+            memory: "1Gi"
+            cpu: "0.5"
